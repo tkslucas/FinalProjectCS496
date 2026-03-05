@@ -4,21 +4,11 @@ It always prefers check/call, then falls back to folding.
 """
 
 from dataclasses import dataclass
-from typing import Literal
 
 from pokerkit import State
-from pydantic import BaseModel, Field
 
 from action_entry import ActionEntry
-
-
-class HeuristicAgentDecision(BaseModel):
-    """Decision returned by the heuristic agent."""
-
-    action: Literal["fold", "check_or_call", "raise_to"]
-    raise_to: int | None = Field(default=None)
-    rationale: str = Field(default="simple_heuristic")
-
+from action_decision import HeuristicAgentDecision
 
 @dataclass
 class HeuristicAgent:
