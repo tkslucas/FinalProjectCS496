@@ -1,78 +1,73 @@
 import json
 import os
-from dotenv import load_dotenv
+from typing import Any
 
+from agents import Agent, Runner
+from agents.mcp import MCPServerStdio
 from pokerkit import State
-from langchain_openai import ChatOpenAI
-from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain.agents import create_agent
+from dotenv import load_dotenv
 
 from action_entry import ActionEntry
 from action_decision import PokerAgentDecision
 from constants import MCP_PATH, MODEL, SYSTEM_PROMPT
 
-load_dotenv() ## OPEN_API_KEY
-
-class PokerMCPToolkit:
-    def __init__(self):
-        self.server_path = os.path.abspath(MCP_PATH)
-        self.client = None
-
-    async def get_tools(self):
-        print(f"DEBUG: Connecting to MCP Server at {self.server_path}...")
-        configs = {
-            "poker_engine": {
-                "command": "python",
-                "args": [self.server_path],
-                "transport": "stdio"
-            }
-        }
-        self.client = MultiServerMCPClient(configs)
-        return await self.client.get_tools()
+load_dotenv()
 
 class PokerAgent:
     def __init__(self):
-        self.llm = ChatOpenAI(model=MODEL, temperature=0)
-        self.toolkit = PokerMCPToolkit()
-        self.agent_executor = None
+        self.model = MODEL
+        self.mcp_path = os.path.abspath(MCP_PATH)
+        self.previous_response_id: str | None = None    
+        self.mcp_server: MCPServerStdio | None = None
+        self._agent: Agent | None = None
 
     async def initialize(self):
-        mcp_tools = await self.toolkit.get_tools()
-        print(f"DEBUG: Loaded tools: {[t.name for t in mcp_tools]}")
-
-        self.agent_executor = create_agent(
-            model=self.llm,
-            tools=mcp_tools,
-            system_prompt=SYSTEM_PROMPT,
-            response_format=PokerAgentDecision
+        self.mcp_server = MCPServerStdio(
+            name="equity_calculator",
+            params={
+                "command": "python",
+                "args": [self.mcp_path]
+            }
         )
-        print("DEBUG: Agent Executor created and ready.")
 
-    async def decide(self, llm_view: dict) -> PokerAgentDecision:
+        await self.mcp_server.connect()
         
+        self._agent = Agent(
+            name="Poker Agent",
+            model=self.model,
+            instructions=SYSTEM_PROMPT,
+            output_type=PokerAgentDecision,
+            mcp_servers=[self.mcp_server]
+        )
+        
+        print("DEBUG: Agent and MCP Provider ready.")
+
+    def reset_for_new_hand(self) -> None:
+        """Reset per-hand memory chain."""
+        # this is for if we ever want to run multiple hands
+        self.previous_response_id = None
+
+    async def decide(self, llm_view: dict[str, Any]) -> PokerAgentDecision:
         input_prompt = f"Game State: {json.dumps(llm_view)}\n"
-        
-        print(f"\n--- AGENT START ({llm_view['street'].upper()}) ---")
 
-        result = await self.agent_executor.ainvoke({"messages": [("user", input_prompt)]})
+        result = await Runner.run(
+            self._agent,
+            input_prompt,
+            previous_response_id=self.previous_response_id,
+        )
 
-        for msg in result["messages"]:
-            if hasattr(msg, "tool_calls") and msg.tool_calls:
-                for tc in msg.tool_calls:
-                    print(f"DEBUG: [Calling MCP Tool] -> {tc['name']}({tc['args']})")
-            
-            elif msg.type == "tool":
-                print(f"DEBUG: [MCP Output Received] -> {msg.content[:200]}...")
-
-            elif msg.type == "ai" and msg.content:
-                print(f"DEBUG: [AI Reasoning] -> {msg.content}")
-
-        print("--- AGENT FINISHED ---")
-        return result["structured_response"]
-
+        """
+        This is so that
+        - decision 1 sees context from decision 0
+        - decision 2 sees context from 0+1
+        - decision 3 sees context from 0+1+2
+        """
+        self.previous_response_id = result.last_response_id
+        return result.final_output_as(PokerAgentDecision)
+    
     async def cleanup(self):
-        self.toolkit.client = None
-        self.toolkit = None
+        await self.mcp_server.cleanup()
+        self.mcp_server = None
 
 def apply_poker_agent_decision(
     state: State,
