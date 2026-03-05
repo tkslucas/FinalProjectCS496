@@ -1,0 +1,2 @@
+pokerkit>=0.7.0
+openai-agents>=0.1.0
