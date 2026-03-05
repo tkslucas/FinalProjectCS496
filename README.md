@@ -14,4 +14,9 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-The OpenAI Agents SDK automatically reads `OPENAI_API_KEY` from environment variables.
+Create a .env file in the root directory and fill in API key
+```bash
+OPEN_API_KEY=[API_KEY]
+```
+
+

@@ -1,4 +1,3 @@
-import asyncio
 from pprint import pformat
 from typing import cast
 
@@ -6,8 +5,10 @@ from pokerkit import Automation, NoLimitTexasHoldem, State
 
 from action_entry import ActionEntry
 from heuristic_agent import HeuristicAgent, apply_heuristic_agent_decision
-from poker_agent import PokerAgent, apply_poker_agent_decision
-from constants import POKER_AGENT_SEAT
+from poker_agent import LlmPokerAgent, apply_poker_agent_decision
+
+POKER_AGENT_SEAT = 0
+
 
 def build_state():
     """Game configurations"""
@@ -46,16 +47,16 @@ def build_heuristic_table(player_count: int):
         if i != POKER_AGENT_SEAT
     }
 
-async def main():
+
+def main():
     state = build_state()
+    poker_agent = LlmPokerAgent()
+    poker_agent.reset_for_new_hand()
     hand_action_history: list[ActionEntry] = []
     heuristic_agents = build_heuristic_table(state.player_count)
 
     for agent in heuristic_agents.values():
         agent.reset_for_new_hand()
-
-    poker_agent = PokerAgent()
-    await poker_agent.initialize()
 
     print("Poker agent seat: 0")
     print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
@@ -71,7 +72,7 @@ async def main():
         if actor == POKER_AGENT_SEAT:
             current_street = _street_name(state.street_index)
             llm_view = build_llm_agent_allowed_view(state, hand_action_history)
-            decision = await poker_agent.decide(llm_view)
+            decision = poker_agent.decide(llm_view)
             action_entry = apply_poker_agent_decision(
                 state,
                 decision,
@@ -104,19 +105,21 @@ async def main():
     print(f"Final stacks: {state.stacks}")
     print(f"Payoffs: {state.payoffs}")
 
-    await poker_agent.cleanup()
 
 def _card_strings(cards) -> list[str]:
     return [str(card) for card in cards]
 
+
 def _seat_label(seat_index: int | None) -> str | None:
     return None if seat_index is None else f"p{seat_index}"
+
 
 def _street_name(street_index: int | None) -> str:
     if street_index is None:
         return "hand_over"
     names = {0: "preflop", 1: "flop", 2: "turn", 3: "river"}
     return names.get(street_index, f"street_{street_index}")
+
 
 def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
     print("-----Simulator View-----")
@@ -130,7 +133,9 @@ def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> N
             )
         )
 
+
 def build_simulator_view(state: State) -> dict:
+    """Everything the simulator knows right now."""
     actor = state.actor_index
     legal_actions = {
         "can_fold": state.can_fold() if actor is not None else False,
@@ -172,7 +177,12 @@ def build_simulator_view(state: State) -> dict:
         "last_operation": repr(state.operations[-1]) if state.operations else None,
     }
 
-def build_llm_agent_allowed_view(state: State, hand_action_history: list[ActionEntry] | None = None) -> dict:
+
+def build_llm_agent_allowed_view(
+    state: State,
+    hand_action_history: list[ActionEntry] | None = None,
+) -> dict:
+    """What the agent is allowed to see"""
     actor = state.actor_index
     is_poker_agent_turn = actor == POKER_AGENT_SEAT
     poker_agent_options = None
@@ -205,5 +215,6 @@ def build_llm_agent_allowed_view(state: State, hand_action_history: list[ActionE
         "poker_agent_hole_cards": _card_strings(state.hole_cards[POKER_AGENT_SEAT]),
     }
 
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
