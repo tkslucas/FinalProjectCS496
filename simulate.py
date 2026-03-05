@@ -46,6 +46,7 @@ def build_heuristic_table(player_count: int):
         if i != POKER_AGENT_SEAT
     }
 
+
 async def main():
     state = build_state()
     hand_action_history: list[ActionEntry] = []
@@ -56,6 +57,7 @@ async def main():
 
     poker_agent = PokerAgent()
     await poker_agent.initialize()
+    poker_agent.reset_for_new_hand()
 
     print("Poker agent seat: 0")
     print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
@@ -106,17 +108,21 @@ async def main():
 
     await poker_agent.cleanup()
 
+
 def _card_strings(cards) -> list[str]:
     return [str(card) for card in cards]
 
+
 def _seat_label(seat_index: int | None) -> str | None:
     return None if seat_index is None else f"p{seat_index}"
+
 
 def _street_name(street_index: int | None) -> str:
     if street_index is None:
         return "hand_over"
     names = {0: "preflop", 1: "flop", 2: "turn", 3: "river"}
     return names.get(street_index, f"street_{street_index}")
+
 
 def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
     print("-----Simulator View-----")
@@ -130,7 +136,9 @@ def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> N
             )
         )
 
+
 def build_simulator_view(state: State) -> dict:
+    """Everything the simulator knows right now."""
     actor = state.actor_index
     legal_actions = {
         "can_fold": state.can_fold() if actor is not None else False,
@@ -172,7 +180,12 @@ def build_simulator_view(state: State) -> dict:
         "last_operation": repr(state.operations[-1]) if state.operations else None,
     }
 
-def build_llm_agent_allowed_view(state: State, hand_action_history: list[ActionEntry] | None = None) -> dict:
+
+def build_llm_agent_allowed_view(
+    state: State,
+    hand_action_history: list[ActionEntry] | None = None,
+) -> dict:
+    """What the agent is allowed to see"""
     actor = state.actor_index
     is_poker_agent_turn = actor == POKER_AGENT_SEAT
     poker_agent_options = None
@@ -204,6 +217,7 @@ def build_llm_agent_allowed_view(state: State, hand_action_history: list[ActionE
         "poker_agent_options_when_in_turn": poker_agent_options,
         "poker_agent_hole_cards": _card_strings(state.hole_cards[POKER_AGENT_SEAT]),
     }
+
 
 if __name__ == "__main__":
     asyncio.run(main())
