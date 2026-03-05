@@ -3,7 +3,8 @@ from typing import cast
 
 from pokerkit import Automation, NoLimitTexasHoldem, State
 
-from heuristic_agent import HeuristicAgent
+from action_entry import ActionEntry
+from heuristic_agent import HeuristicAgent, apply_heuristic_agent_decision
 from poker_agent import LlmPokerAgent, apply_poker_agent_decision
 
 POKER_AGENT_SEAT = 0
@@ -51,17 +52,16 @@ def main():
     state = build_state()
     poker_agent = LlmPokerAgent()
     poker_agent.reset_for_new_hand()
-    recent_other_player_actions: list[dict[str, object]] = []
+    hand_action_history: list[ActionEntry] = []
     heuristic_agents = build_heuristic_table(state.player_count)
 
     for agent in heuristic_agents.values():
         agent.reset_for_new_hand()
-        agent.observe_state(state)
 
     print("Poker agent seat: 0")
     print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
     print(f"Starting stacks: {state.stacks}")
-    print_state_views(state, recent_other_player_actions)
+    print_state_views(state, hand_action_history)
 
     action_no = 1
     while state.status:
@@ -70,10 +70,16 @@ def main():
             break
 
         if actor == POKER_AGENT_SEAT:
-            llm_view = build_llm_agent_allowed_view(state, recent_other_player_actions)
+            current_street = _street_name(state.street_index)
+            llm_view = build_llm_agent_allowed_view(state, hand_action_history)
             decision = poker_agent.decide(llm_view)
-            action = apply_poker_agent_decision(state, decision)
-            recent_other_player_actions.clear()
+            action_entry = apply_poker_agent_decision(
+                state,
+                decision,
+                street=current_street,
+            )
+            hand_action_history.append(action_entry)
+            action = str(action_entry["action_taken"])
             print(
                 "Poker agent decision: "
                 f"action={decision.action}, "
@@ -83,16 +89,17 @@ def main():
         else:
             # heuristic agent's turn
             current_street = _street_name(state.street_index)
-            action = heuristic_agents[actor].act(
+            heuristic_decision = heuristic_agents[actor].decide(state)
+            action_entry = apply_heuristic_agent_decision(
                 state,
-                recent_other_player_actions,
-                current_street,
+                heuristic_decision,
+                street=current_street,
             )
+            hand_action_history.append(action_entry)
+            action = str(action_entry["action_taken"])
 
-        for agent in heuristic_agents.values():
-            agent.observe_state(state)
         print(f"Action {action_no}: p{actor} -> {action}")
-        print_state_views(state, recent_other_player_actions)
+        print_state_views(state, hand_action_history)
         action_no += 1
 
     print(f"Final stacks: {state.stacks}")
@@ -114,16 +121,14 @@ def _street_name(street_index: int | None) -> str:
     return names.get(street_index, f"street_{street_index}")
 
 
-def print_state_views(
-    state: State, recent_other_player_actions: list[dict[str, object]]
-) -> None:
+def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
     print("-----Simulator View-----")
     print(pformat(build_simulator_view(state), sort_dicts=False))
     if state.actor_index == POKER_AGENT_SEAT:
         print("\n------LLM Agent View-----\n")
         print(
             pformat(
-                build_llm_agent_allowed_view(state, recent_other_player_actions),
+                build_llm_agent_allowed_view(state, hand_action_history),
                 sort_dicts=False,
             )
         )
@@ -175,7 +180,7 @@ def build_simulator_view(state: State) -> dict:
 
 def build_llm_agent_allowed_view(
     state: State,
-    recent_other_player_actions: list[dict[str, object]] | None = None,
+    hand_action_history: list[ActionEntry] | None = None,
 ) -> dict:
     """What the agent is allowed to see"""
     actor = state.actor_index
@@ -205,7 +210,7 @@ def build_llm_agent_allowed_view(
         "current_bets_by_player": {f"p{i}": bet for i, bet in enumerate(state.bets)},
         "pot_total": state.total_pot_amount,
         "pot_breakdown": list(state.pot_amounts),
-        "recent_other_player_actions": recent_other_player_actions or [],
+        "hand_action_history": hand_action_history or [],
         "poker_agent_options_when_in_turn": poker_agent_options,
         "poker_agent_hole_cards": _card_strings(state.hole_cards[POKER_AGENT_SEAT]),
     }

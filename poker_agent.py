@@ -3,6 +3,7 @@ import os
 from dataclasses import dataclass
 from typing import Any, Literal
 
+from action_entry import ActionEntry
 from agents import Agent, Runner
 from pokerkit import State
 from pydantic import BaseModel, Field
@@ -57,20 +58,51 @@ class LlmPokerAgent:
         return result.final_output_as(PokerAgentDecision)
 
 
-def apply_poker_agent_decision(state: State, decision: PokerAgentDecision) -> str:
-    """Apply poker-agent decision and raise on illegal actions."""
+def apply_poker_agent_decision(
+    state: State,
+    decision: PokerAgentDecision,
+    *,
+    street: str,
+) -> ActionEntry:
+    """Apply poker-agent decision and return an action entry."""
+    player_index = state.actor_index
+    if player_index is None:
+        raise ValueError("No active actor when applying poker-agent decision.")
+
     if decision.action == "check_or_call" and state.can_check_or_call():
-        state.check_or_call()
-        return "check_or_call"
+        operation = state.check_or_call()
+        amount = getattr(operation, "amount", 0)
+        if amount == 0:
+            return {
+                "player": f"p{player_index}",
+                "street": street,
+                "action_taken": "check",
+            }
+        return {
+            "player": f"p{player_index}",
+            "street": street,
+            "action_taken": "call",
+            "amount": amount,
+        }
 
     if decision.action == "fold" and state.can_fold():
         state.fold()
-        return "fold"
+        return {
+            "player": f"p{player_index}",
+            "street": street,
+            "action_taken": "fold",
+        }
 
     if decision.action == "raise_to":
         target = decision.raise_to
         if target is not None and state.can_complete_bet_or_raise_to(target):
-            state.complete_bet_or_raise_to(target)
-            return f"raise_to_{target}"
+            operation = state.complete_bet_or_raise_to(target)
+            amount = getattr(operation, "amount", target)
+            return {
+                "player": f"p{player_index}",
+                "street": street,
+                "action_taken": "raise_to",
+                "amount": amount,
+            }
 
     raise ValueError(f"Illegal poker-agent action: {decision.model_dump()}")
