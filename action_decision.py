@@ -1,4 +1,3 @@
-
 from typing import Literal
 from pydantic import BaseModel, Field
 
@@ -14,5 +13,5 @@ class PokerAgentDecision(BaseModel):
 
     action: Literal["fold", "check_or_call", "raise_to"]
     raise_to: int | None = Field(default=None)
-    rationale: str
+    reasoning_chain: str
 

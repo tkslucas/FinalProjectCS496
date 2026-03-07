@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from typing import Any
 
 from agents import Agent, Runner
@@ -9,7 +10,7 @@ from dotenv import load_dotenv
 
 from action_entry import ActionEntry
 from action_decision import PokerAgentDecision
-from constants import MCP_PATH, MODEL, SYSTEM_PROMPT
+from constants import MCP_PATH, MODEL, SYSTEM_PROMPT, LOG_DIR
 
 load_dotenv()
 
@@ -20,6 +21,8 @@ class PokerAgent:
         self.previous_response_id: str | None = None    
         self.mcp_server: MCPServerStdio | None = None
         self._agent: Agent | None = None
+        self.log_dir = LOG_DIR
+        self.current_hand_id: int | None = None
 
     async def initialize(self):
         self.mcp_server = MCPServerStdio(
@@ -39,13 +42,15 @@ class PokerAgent:
             output_type=PokerAgentDecision,
             mcp_servers=[self.mcp_server]
         )
-        
-        print("DEBUG: Agent and MCP Provider ready.")
+
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
 
     def reset_for_new_hand(self) -> None:
         """Reset per-hand memory chain."""
         # this is for if we ever want to run multiple hands
         self.previous_response_id = None
+        self.current_hand_id = int(time.time() * 1000)
 
     async def decide(self, llm_view: dict[str, Any]) -> PokerAgentDecision:
         input_prompt = f"Game State: {json.dumps(llm_view)}\n"
@@ -63,8 +68,43 @@ class PokerAgent:
         - decision 3 sees context from 0+1+2
         """
         self.previous_response_id = result.last_response_id
-        return result.final_output_as(PokerAgentDecision)
+        decision = result.final_output_as(PokerAgentDecision)
+
+        self._log_hand(llm_view, decision)
+        return decision
     
+    def _log_hand(self, state: dict, decision: PokerAgentDecision):
+        hand_dir = os.path.join(self.log_dir, f"hand_{self.current_hand_id}")
+        if not os.path.exists(hand_dir):
+            os.makedirs(hand_dir)
+        street = state.get('street', 'unknown')
+        filename = f"{street}.json"
+        filepath = os.path.join(hand_dir, filename)
+        
+        log_entry = {
+            "decision": {
+                "action": decision.action,
+                "amount": decision.raise_to,
+                "reasoning_chain": decision.reasoning_chain
+            },
+            "raw_state": state
+        }
+        
+        with open(filepath, "w") as f:
+            json.dump(log_entry, f, indent=4)
+
+    def _log_final_result(self, state: State):
+        hand_dir = os.path.join(self.log_dir, f"hand_{self.current_hand_id}")
+        filepath = os.path.join(hand_dir, "result.json")
+        
+        result_data = {
+            "final_stacks": list(state.stacks),
+            "payoffs": list(state.payoffs),
+        }
+
+        with open(filepath, "w") as f:
+            json.dump(result_data, f, indent=4)
+
     async def cleanup(self):
         await self.mcp_server.cleanup()
         self.mcp_server = None
