@@ -1,3 +1,5 @@
+import os
+import json
 import asyncio
 from pprint import pformat
 from typing import cast
@@ -85,7 +87,7 @@ async def main():
                 "Poker agent decision: "
                 f"action={decision.action}, "
                 f"raise_to={decision.raise_to}, "
-                f"rationale={decision.rationale}"
+                f"reasoning_chain={decision.reasoning_chain}"
             )
         else:
             # heuristic agent's turn
@@ -106,6 +108,7 @@ async def main():
     print(f"Final stacks: {state.stacks}")
     print(f"Payoffs: {state.payoffs}")
 
+    poker_agent._log_final_result(state)
     await poker_agent.cleanup()
 
 
@@ -122,7 +125,6 @@ def _street_name(street_index: int | None) -> str:
         return "hand_over"
     names = {0: "preflop", 1: "flop", 2: "turn", 3: "river"}
     return names.get(street_index, f"street_{street_index}")
-
 
 def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
     print("-----Simulator View-----")
