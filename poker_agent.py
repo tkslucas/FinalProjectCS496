@@ -59,6 +59,9 @@ class PokerAgent:
         hand_history = llm_view.get("hand_action_history", [])
         similar_hands = retrieve_similar_hands(hand_history, llm_view)
 
+        print("\n=== RAG RESULTS ===")
+        print(similar_hands)
+        print("===================\n")
         
         input_prompt = (
             f"Game State: {json.dumps(llm_view)}\n\n"
