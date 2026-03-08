@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 from action_entry import ActionEntry
 from action_decision import PokerAgentDecision
 from constants import MCP_PATH, MODEL, SYSTEM_PROMPT, LOG_DIR
+from rag_retrieval import retrieve_similar_hands
+
 
 load_dotenv()
 
@@ -53,7 +55,17 @@ class PokerAgent:
         self.current_hand_id = int(time.time() * 1000)
 
     async def decide(self, llm_view: dict[str, Any]) -> PokerAgentDecision:
-        input_prompt = f"Game State: {json.dumps(llm_view)}\n"
+
+        hand_history = llm_view.get("hand_action_history", [])
+        similar_hands = retrieve_similar_hands(hand_history, llm_view)
+
+        
+        input_prompt = (
+            f"Game State: {json.dumps(llm_view)}\n\n"
+            f"Here are similar hands from a poker solver database for reference:\n"
+            f"{similar_hands}\n\n"
+            f"Use these as guidance but make your own decision based on the full game state."
+        )
 
         result = await Runner.run(
             self._agent,
