@@ -5,3 +5,5 @@ __pycache__
 logs
 chroma_db/
 *.sqlite3
+chroma_db/
+*.sqlite3
