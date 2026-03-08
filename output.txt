@@ -6,12 +6,12 @@ Starting stacks: [99, 98, 100, 100]
  'street_index': 0,
  'actor_index': 2,
  'board_cards': [],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [1, 2, 0, 0],
  'stacks': [99, 98, 100, 100],
@@ -25,7 +25,7 @@ Starting stacks: [99, 98, 100, 100]
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
  'operation_count': 10,
- 'last_operation': 'HoleDealing(commentary=None, player_index=3, cards=(2d,), '
+ 'last_operation': 'HoleDealing(commentary=None, player_index=3, cards=(6d,), '
                    'statuses=(False,))'}
 Action 1: p2 -> call
 -----Simulator View-----
@@ -33,12 +33,12 @@ Action 1: p2 -> call
  'street_index': 0,
  'actor_index': 3,
  'board_cards': [],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [1, 2, 2, 0],
  'stacks': [99, 98, 98, 100],
@@ -60,12 +60,12 @@ Action 2: p3 -> call
  'street_index': 0,
  'actor_index': 0,
  'board_cards': [],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [1, 2, 2, 2],
  'stacks': [99, 98, 98, 98],
@@ -109,20 +109,96 @@ Action 2: p3 -> call
                                       'can_fold': True,
                                       'can_check_or_call': True,
                                       'can_complete_bet_or_raise_to': True},
- 'poker_agent_hole_cards': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)']}
-Poker agent decision: action=raise_to, raise_to=4, reasoning_chain=<observation>My hole cards are 6 of Hearts and Queen of Spades. There are no community cards yet as we are preflop. The pot is currently 7 chips, and I need to call 1 chip to continue. The position is UTG (under the gun) with three active players including myself. The board is not yet visible. The opponents have both called the big blind raise of 2 chips.</observation><reasoning>Using the poker analysis tool, my hole cards (6h and Qs) have a win probability of about 46.8%. The suggested action is that this is a decent hand and consideration of calling or a small raise is appropriate. Pot odds for calling are 1 / (7 + 1) = 1/8 = 12.5%, which are favorable compared to the win probability, so calling is feasible. However, raising to the minimum of 4 chips could put pressure on the callers, isolate the field, and build the pot for a hand with decent winning chances. Additionally, a raise in UTG position with Q6 offsuit is somewhat aggressive but justifiable given the state of the pot and the presence of multiple limpers.</reasoning><action>I will raise to the minimum raise size of 4 chips to take control of the pot and leverage my hand strength and table position.</action>
+ 'poker_agent_hole_cards': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)']}
+
+=== RAG RESULTS ===
+Your current hand described:
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision. Here is a game summary: The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips. The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB. In this hand, your position is p0, and your holding is EIGHT OF SPADES (8s) and TEN OF SPADES (Ts). Before the flop, p2 called 2 chips, and p3 called 2 chips. Now it is your turn to make a move. To remind you, the current pot size is 7 chips, and your holding is EIGHT OF SPADES (8s) and TEN OF SPADES (Ts).
+
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is BB, and your holding is [Eight of Spade and Seven of Spade].
+Before the flop, BTN raise 2.5 chips, and BB call. Assume that all other players that is not mentioned folded.
+The flop comes Seven Of Diamond, Six Of Club, and Four Of Heart, then BB check, and BTN bet 2 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 7.0 chips, and your holding is [Eight of Spade and Seven of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: call
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is BTN, and your holding is [Jack of Spade and Eight of Spade].
+Before the flop, BTN raise 2.5 chips, and BB call. Assume that all other players that is not mentioned folded.
+The flop comes Ten Of Diamond, Six Of Heart, and Four Of Heart, then BB check.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 5.0 chips, and your holding is [Jack of Spade and Eight of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: check
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is BTN, and your holding is [Ten of Club and Eight of Spade].
+Before the flop, BTN raise 2.5 chips, and BB call. Assume that all other players that is not mentioned folded.
+The flop comes Jack Of Spade, Eight Of Diamond, and Three Of Club, then BB bet 2 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 7.0 chips, and your holding is [Ten of Club and Eight of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: call
+===================
+
+Poker agent decision: action=raise_to, raise_to=4, reasoning_chain=<observation>The poker agent holds Eight of Spades and Ten of Spades in a 6-handed preflop scenario. The pot size is 7 chips with 1 chip to call to stay in the hand. Three players including me are active, and two have called the big blind. No community cards are dealt yet, so this is a preflop decision. The pot odds to call are 1 / (7 + 1) = 0.125 or 12.5%.</observation><reasoning>The hand has a decent winning probability of about 52.46% according to Monte Carlo simulations, suggesting it is a playable hand in this situation. The pot odds to call are only 12.5%, so calling is quite profitable in terms of pot odds. Raising to 4 chips would leverage position and build the pot with a moderately strong hand in a multi-way pot. A raise also can thin the field and gain information about opponents' holdings. Given the strength, recommended play is to raise to 4 chips, the minimum raise, to apply pressure and maximize EV.</reasoning><action>I will raise to 4 chips, the minimal raise allowed, to capitalize on the equity in this hand and to build the pot in a multi-way preflop situation.</action>
 Action 3: p0 -> raise_to
 -----Simulator View-----
 {'status': True,
  'street_index': 0,
  'actor_index': 1,
  'board_cards': [],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [4, 2, 2, 2],
  'stacks': [96, 98, 98, 98],
@@ -144,12 +220,12 @@ Action 4: p1 -> call
  'street_index': 0,
  'actor_index': 2,
  'board_cards': [],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [4, 4, 2, 2],
  'stacks': [96, 96, 98, 98],
@@ -171,12 +247,12 @@ Action 5: p2 -> call
  'street_index': 0,
  'actor_index': 3,
  'board_cards': [],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [4, 4, 4, 2],
  'stacks': [96, 96, 96, 98],
@@ -197,13 +273,13 @@ Action 6: p3 -> call
 {'status': True,
  'street_index': 1,
  'actor_index': 0,
- 'board_cards': ['[4h]', '[Qh]', '[Td]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [0, 0, 0, 0],
  'stacks': [96, 96, 96, 96],
@@ -217,13 +293,13 @@ Action 6: p3 -> call
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
  'operation_count': 19,
- 'last_operation': 'BoardDealing(commentary=None, cards=(4h, Qh, Td))'}
+ 'last_operation': 'BoardDealing(commentary=None, cards=(5d, Jd, Jc))'}
 
 ------LLM Agent View-----
 
 {'hand_active': True,
  'street': 'flop',
- 'board_cards': ['[4h]', '[Qh]', '[Td]'],
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]'],
  'whose_turn': 'p0',
  'is_poker_agent_turn': True,
  'poker_agent_position': 'p0',
@@ -262,129 +338,206 @@ Action 6: p3 -> call
                                       'can_fold': False,
                                       'can_check_or_call': True,
                                       'can_complete_bet_or_raise_to': True},
- 'poker_agent_hole_cards': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)']}
-Poker agent decision: action=raise_to, raise_to=8, reasoning_chain=<observation>We are on the flop with board cards 4 of hearts, Queen of hearts, and 10 of diamonds. Our hole cards are 6 of hearts and Queen of spades, giving us a top pair (queens) with a decent kicker and no current bets facing us. The pot size is 16 chips, and we have the option to check/call or make a bet with a minimum raise size of 2 chips.</observation><reasoning>The poker analysis tool shows our current hand has a strong win probability of approximately 68.24%, which reflects the strength of top pair top kicker on this flop. The suggestion is to consider raising moderately to capitalize on our strong hand while building the pot. Making a bet around half the pot (8 chips) is appropriate to extract value from draws and weaker pairs while protecting our hand against potential flush or straight draws. Checking would relinquish control, and folding is not warranted given our hand strength.</reasoning><action>Given the strength of the hand and the situation, I will raise to 8 chips to build the pot and apply pressure to opponents.</action>
-Action 7: p0 -> raise_to
+ 'poker_agent_hole_cards': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)']}
+
+=== RAG RESULTS ===
+Your current hand described:
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision. Here is a game summary: The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips. The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB. In this hand, your position is UTG, and your holding is EIGHT OF SPADES (8s) and TEN OF SPADES (Ts). Before the flop, the HJ called 2 chips, the CO called 2 chips, you raised to 4 chips, the BTN called 2 chips, the HJ called 2 chips, and the CO called 2 chips. The flop comes [5d], [Jd], [Jc], then action is on you. Now it is your turn to make a move. To remind you, the current pot size is 16 chips, and your holding is EIGHT OF SPADES (8s) and TEN OF SPADES (Ts).
+
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is BTN, and your holding is [Jack of Spade and Eight of Spade].
+Before the flop, BTN raise 2.5 chips, and BB call. Assume that all other players that is not mentioned folded.
+The flop comes Ten Of Diamond, Six Of Heart, and Four Of Heart, then BB check.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 5.0 chips, and your holding is [Jack of Spade and Eight of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: check
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is HJ, and your holding is [Eight of Spade and Eight of Heart].
+Before the flop, HJ raise 2.0 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Ten Of Diamond, Six Of Heart, and Four Of Heart, then HJ check, and BTN check.
+The turn comes Eight Of Diamond, then HJ check, and BTN bet 4 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 9.0 chips, and your holding is [Eight of Spade and Eight of Heart].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: raise 13
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is BTN, and your holding is [Eight of Spade and Eight of Club].
+Before the flop, HJ raise 2.0 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Four Of Spade, Four Of Heart, and Three Of Heart, then HJ check.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 5.0 chips, and your holding is [Eight of Spade and Eight of Club].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: check
+===================
+
+Poker agent decision: action=check_or_call, raise_to=None, reasoning_chain=<observation>We are on the flop with the board showing 5 of diamonds, Jack of diamonds, and Jack of clubs. Our hole cards are Eight of Spades and Ten of Spades. The pot size is 16 chips, and no current bets have been made on this street, so we can check or bet. There are three opponents still active in the pot.</observation><reasoning>The hand currently has an estimated win probability of about 40.1% according to simulations, indicating we have moderate equity but no made hand yet. The board is paired with Jacks, which reduces the likelihood of our Tens or Eights winning unless we hit a straight or bluff effectively later. Since there is no bet to call, checking is a prudent choice to control pot size and gather more information before committing chips further. Raising without a strong made hand or draws would be less optimal and could lead to losing chips unnecessarily.</reasoning><action>I will choose to check and see how the street develops.</action>
+Action 7: p0 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 1,
  'actor_index': 1,
- 'board_cards': ['[4h]', '[Qh]', '[Td]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
- 'bets': [8, 0, 0, 0],
- 'stacks': [88, 96, 96, 96],
- 'payoffs': [-12, -4, -4, -4],
+ 'bets': [0, 0, 0, 0],
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
  'pot_amounts': [16],
- 'total_pot_amount': 24,
- 'checking_or_calling_amount': 8,
- 'min_raise_to': 16,
+ 'total_pot_amount': 16,
+ 'checking_or_calling_amount': 0,
+ 'min_raise_to': 2,
  'max_raise_to': 96,
- 'legal_actions_for_actor': {'can_fold': True,
+ 'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
  'operation_count': 20,
- 'last_operation': 'CompletionBettingOrRaisingTo(commentary=None, '
-                   'player_index=0, amount=8)'}
-Action 8: p1 -> call
+ 'last_operation': 'CheckingOrCalling(commentary=None, player_index=0, '
+                   'amount=0)'}
+Action 8: p1 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 1,
  'actor_index': 2,
- 'board_cards': ['[4h]', '[Qh]', '[Td]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
- 'bets': [8, 8, 0, 0],
- 'stacks': [88, 88, 96, 96],
- 'payoffs': [-12, -12, -4, -4],
+ 'bets': [0, 0, 0, 0],
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
  'pot_amounts': [16],
- 'total_pot_amount': 32,
- 'checking_or_calling_amount': 8,
- 'min_raise_to': 16,
+ 'total_pot_amount': 16,
+ 'checking_or_calling_amount': 0,
+ 'min_raise_to': 2,
  'max_raise_to': 96,
- 'legal_actions_for_actor': {'can_fold': True,
+ 'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
  'operation_count': 21,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=1, '
-                   'amount=8)'}
-Action 9: p2 -> call
+                   'amount=0)'}
+Action 9: p2 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 1,
  'actor_index': 3,
- 'board_cards': ['[4h]', '[Qh]', '[Td]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
- 'bets': [8, 8, 8, 0],
- 'stacks': [88, 88, 88, 96],
- 'payoffs': [-12, -12, -12, -4],
+ 'bets': [0, 0, 0, 0],
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
  'pot_amounts': [16],
- 'total_pot_amount': 40,
- 'checking_or_calling_amount': 8,
- 'min_raise_to': 16,
+ 'total_pot_amount': 16,
+ 'checking_or_calling_amount': 0,
+ 'min_raise_to': 2,
  'max_raise_to': 96,
- 'legal_actions_for_actor': {'can_fold': True,
+ 'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
  'operation_count': 22,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=2, '
-                   'amount=8)'}
-Action 10: p3 -> call
+                   'amount=0)'}
+Action 10: p3 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 2,
  'actor_index': 0,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [0, 0, 0, 0],
- 'stacks': [88, 88, 88, 88],
- 'payoffs': [-12, -12, -12, -12],
- 'pot_amounts': [48],
- 'total_pot_amount': 48,
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
  'checking_or_calling_amount': 0,
  'min_raise_to': 2,
- 'max_raise_to': 88,
+ 'max_raise_to': 96,
  'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 26,
- 'last_operation': 'BoardDealing(commentary=None, cards=(9c,))'}
+ 'operation_count': 25,
+ 'last_operation': 'BoardDealing(commentary=None, cards=(6c,))'}
 
 ------LLM Agent View-----
 
 {'hand_active': True,
  'street': 'turn',
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]'],
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]'],
  'whose_turn': 'p0',
  'is_poker_agent_turn': True,
  'poker_agent_position': 'p0',
  'active_players': ['p0', 'p1', 'p2', 'p3'],
- 'stacks_by_player': {'p0': 88, 'p1': 88, 'p2': 88, 'p3': 88},
+ 'stacks_by_player': {'p0': 96, 'p1': 96, 'p2': 96, 'p3': 96},
  'current_bets_by_player': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
- 'pot_total': 48,
- 'pot_breakdown': [48],
+ 'pot_total': 16,
+ 'pot_breakdown': [16],
  'hand_action_history': [{'player': 'p2',
                           'street': 'preflop',
                           'action_taken': 'call',
@@ -411,149 +564,222 @@ Action 10: p3 -> call
                           'amount': 2},
                          {'player': 'p0',
                           'street': 'flop',
-                          'action_taken': 'raise_to',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p1',
                           'street': 'flop',
-                          'action_taken': 'call',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p2',
                           'street': 'flop',
-                          'action_taken': 'call',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p3',
                           'street': 'flop',
-                          'action_taken': 'call',
-                          'amount': 8}],
+                          'action_taken': 'check'}],
  'poker_agent_options_when_in_turn': {'to_call': 0,
                                       'min_raise_to': 2,
-                                      'max_raise_to': 88,
+                                      'max_raise_to': 96,
                                       'can_fold': False,
                                       'can_check_or_call': True,
                                       'can_complete_bet_or_raise_to': True},
- 'poker_agent_hole_cards': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)']}
-Poker agent decision: action=raise_to, raise_to=24, reasoning_chain=<observation>We are on the turn with board cards 4 of hearts, Queen of hearts, 10 of diamonds, and 9 of clubs. Our hole cards remain 6 of hearts and Queen of spades, giving us top pair top kicker. The pot is now 48 chips with no current bet to call on this street. The minimum raise allowed is 2 chips and maximum is 88 chips.</observation><reasoning>According to the poker analysis tool, our hand remains strong with a win probability of about 62.76%. We still have top pair top kicker but the board has become more connected, presenting some straight and flush draw possibilities to opponents. To protect our hand and extract value from drawing and weaker made hands, a moderate raise is appropriate. Betting around half the pot, such as 24 chips, will put pressure on draws and weaker hands while building the pot for potential later streets. Checking would allow opponents to realize their equity cheaply, which is not ideal.</reasoning><action>I will raise to 24 chips to continue aggression, protect my hand, and maximize value against opponents with draws or weaker pairs.</action>
-Action 11: p0 -> raise_to
+ 'poker_agent_hole_cards': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)']}
+
+=== RAG RESULTS ===
+Your current hand described:
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision. Here is a game summary: The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips. The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB. In this hand, your position is UTG, and your holding is Ten of Spades and Eight of Spades. Before the flop, the HJ called 2 chips, the CO called 2 chips, you raised to 4 chips, the BTN called 2 chips, the HJ called 2 chips, and the CO called 2 chips. The flop comes [5d], [Jd], [Jc], then you checked, the BTN checked, the HJ checked, and the CO checked. Now it is your turn to make a move. To remind you, the current pot size is 16 chips, and your holding is Ten of Spades and Eight of Spades.
+
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is BTN, and your holding is [Ten of Spade and Ten of Diamond].
+Before the flop, CO raise 2.3 chips, BTN raise 7.5 chips, and CO call. Assume that all other players that is not mentioned folded.
+The flop comes Jack Of Club, Jack Of Heart, and Four Of Spade, then CO check.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 16.0 chips, and your holding is [Ten of Spade and Ten of Diamond].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: bet 3
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is CO, and your holding is [Ten of Spade and Eight of Spade].
+Before the flop, CO raise 2.3 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Four Of Spade, Four Of Heart, and Three Of Heart, then CO check, BTN bet 2 chips, CO raise 9 chips, and BTN call.
+The turn comes Jack Of Heart, then CO check, and BTN bet 18 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 42.0 chips, and your holding is [Ten of Spade and Eight of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: fold
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is HJ, and your holding is [Ten of Spade and Ten of Club].
+Before the flop, HJ raise 2.0 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Six Of Spade, Eight Of Diamond, and Seven Of Club, then HJ bet 2 chips, and BTN raise 8 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 15.0 chips, and your holding is [Ten of Spade and Ten of Club].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: raise 22
+===================
+
+Poker agent decision: action=check_or_call, raise_to=None, reasoning_chain=<observation>It is now the turn with the board showing 5 of diamonds, Jack of diamonds, Jack of clubs, and 6 of clubs. Our hole cards are Eight of Spades and Ten of Spades. The pot size is 16 chips, with no bets made on this round so far. All four players remain in the hand.</observation><reasoning>After the turn card, the win probability of the hand has decreased to approximately 32.59%, indicating the hand is relatively weak on this board. There are no strong draws or made hands present based on our hole cards relative to the paired Jacks and the 6. Given the weakness of the hand and no betting action to respond to, the optimal play is to check and avoid building the pot. Betting or raising here without a strong hand would be suboptimal and potentially costly.</reasoning><action>I will check to control the pot size and see how opponents act on this turn.</action>
+Action 11: p0 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 2,
  'actor_index': 1,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
- 'bets': [24, 0, 0, 0],
- 'stacks': [64, 88, 88, 88],
- 'payoffs': [-36, -12, -12, -12],
- 'pot_amounts': [48],
- 'total_pot_amount': 72,
- 'checking_or_calling_amount': 24,
- 'min_raise_to': 48,
- 'max_raise_to': 88,
- 'legal_actions_for_actor': {'can_fold': True,
+ 'bets': [0, 0, 0, 0],
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
+ 'checking_or_calling_amount': 0,
+ 'min_raise_to': 2,
+ 'max_raise_to': 96,
+ 'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 27,
- 'last_operation': 'CompletionBettingOrRaisingTo(commentary=None, '
-                   'player_index=0, amount=24)'}
-Action 12: p1 -> call
+ 'operation_count': 26,
+ 'last_operation': 'CheckingOrCalling(commentary=None, player_index=0, '
+                   'amount=0)'}
+Action 12: p1 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 2,
  'actor_index': 2,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
- 'bets': [24, 24, 0, 0],
- 'stacks': [64, 64, 88, 88],
- 'payoffs': [-36, -36, -12, -12],
- 'pot_amounts': [48],
- 'total_pot_amount': 96,
- 'checking_or_calling_amount': 24,
- 'min_raise_to': 48,
- 'max_raise_to': 88,
- 'legal_actions_for_actor': {'can_fold': True,
+ 'bets': [0, 0, 0, 0],
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
+ 'checking_or_calling_amount': 0,
+ 'min_raise_to': 2,
+ 'max_raise_to': 96,
+ 'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 28,
+ 'operation_count': 27,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=1, '
-                   'amount=24)'}
-Action 13: p2 -> call
+                   'amount=0)'}
+Action 13: p2 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 2,
  'actor_index': 3,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
- 'bets': [24, 24, 24, 0],
- 'stacks': [64, 64, 64, 88],
- 'payoffs': [-36, -36, -36, -12],
- 'pot_amounts': [48],
- 'total_pot_amount': 120,
- 'checking_or_calling_amount': 24,
- 'min_raise_to': 48,
- 'max_raise_to': 88,
- 'legal_actions_for_actor': {'can_fold': True,
+ 'bets': [0, 0, 0, 0],
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
+ 'checking_or_calling_amount': 0,
+ 'min_raise_to': 2,
+ 'max_raise_to': 96,
+ 'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 29,
+ 'operation_count': 28,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=2, '
-                   'amount=24)'}
-Action 14: p3 -> call
+                   'amount=0)'}
+Action 14: p3 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 3,
  'actor_index': 0,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]', '[8d]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]', '[9c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [0, 0, 0, 0],
- 'stacks': [64, 64, 64, 64],
- 'payoffs': [-36, -36, -36, -36],
- 'pot_amounts': [144],
- 'total_pot_amount': 144,
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
  'checking_or_calling_amount': 0,
  'min_raise_to': 2,
- 'max_raise_to': 64,
+ 'max_raise_to': 96,
  'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 33,
- 'last_operation': 'BoardDealing(commentary=None, cards=(8d,))'}
+ 'operation_count': 31,
+ 'last_operation': 'BoardDealing(commentary=None, cards=(9c,))'}
 
 ------LLM Agent View-----
 
 {'hand_active': True,
  'street': 'river',
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]', '[8d]'],
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]', '[9c]'],
  'whose_turn': 'p0',
  'is_poker_agent_turn': True,
  'poker_agent_position': 'p0',
  'active_players': ['p0', 'p1', 'p2', 'p3'],
- 'stacks_by_player': {'p0': 64, 'p1': 64, 'p2': 64, 'p3': 64},
+ 'stacks_by_player': {'p0': 96, 'p1': 96, 'p2': 96, 'p3': 96},
  'current_bets_by_player': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
- 'pot_total': 144,
- 'pot_breakdown': [144],
+ 'pot_total': 16,
+ 'pot_breakdown': [16],
  'hand_action_history': [{'player': 'p2',
                           'street': 'preflop',
                           'action_taken': 'call',
@@ -580,69 +806,141 @@ Action 14: p3 -> call
                           'amount': 2},
                          {'player': 'p0',
                           'street': 'flop',
-                          'action_taken': 'raise_to',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p1',
                           'street': 'flop',
-                          'action_taken': 'call',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p2',
                           'street': 'flop',
-                          'action_taken': 'call',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p3',
                           'street': 'flop',
-                          'action_taken': 'call',
-                          'amount': 8},
+                          'action_taken': 'check'},
                          {'player': 'p0',
                           'street': 'turn',
-                          'action_taken': 'raise_to',
-                          'amount': 24},
+                          'action_taken': 'check'},
                          {'player': 'p1',
                           'street': 'turn',
-                          'action_taken': 'call',
-                          'amount': 24},
+                          'action_taken': 'check'},
                          {'player': 'p2',
                           'street': 'turn',
-                          'action_taken': 'call',
-                          'amount': 24},
+                          'action_taken': 'check'},
                          {'player': 'p3',
                           'street': 'turn',
-                          'action_taken': 'call',
-                          'amount': 24}],
+                          'action_taken': 'check'}],
  'poker_agent_options_when_in_turn': {'to_call': 0,
                                       'min_raise_to': 2,
-                                      'max_raise_to': 64,
+                                      'max_raise_to': 96,
                                       'can_fold': False,
                                       'can_check_or_call': True,
                                       'can_complete_bet_or_raise_to': True},
- 'poker_agent_hole_cards': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)']}
-Poker agent decision: action=check_or_call, raise_to=None, reasoning_chain=<observation>On the river, the board cards are 4 of hearts, Queen of hearts, 10 of diamonds, 9 of clubs, and 8 of diamonds. I hold 6 of hearts and Queen of spades, making top pair with a queen kicker. The pot size is 144 chips. There are no bets to call or raises to make currently; I can check or bet.</observation><reasoning>The poker analysis tool indicates my hand has a moderate win probability of approximately 51.35%, reflecting a decent but vulnerable hand in a multiway pot with potential straights and flushes on board. The suggested action is to consider calling or making a small raise, but given no betting action has occurred on the river, betting risks value getting called or raised by better hands. Checking here controls the pot size and allows me to see opponents' actions, optimizing my EV in this situation.</reasoning><action>I choose to check, effectively controlling pot size with a decent but not strong made hand on this coordinated board.</action>
+ 'poker_agent_hole_cards': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)']}
+
+=== RAG RESULTS ===
+Your current hand described:
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision. Here is a game summary: The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips. The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB. In this hand, your position is UTG, and your holding is 8 of Spades and 10 of Spades. Before the flop, the HJ called 2 chips, the CO called 2 chips, you raised to 4 chips, the BTN called 2 chips, the HJ called 2 chips, and the CO called 2 chips. The flop comes [5d], [Jd], [Jc], then you checked, the BTN checked, the HJ checked, and the CO checked. On the turn, [6c] appears, and again you checked, the BTN checked, the HJ checked, and the CO checked. Now it is your turn to make a move on the river, which is [9c]. To remind you, the current pot size is 16 chips, and your holding is 8 of Spades and 10 of Spades.
+
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is CO, and your holding is [Ace of Spade and Jack of Spade].
+Before the flop, CO raise 2.3 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Seven Of Diamond, Six Of Club, and Four Of Heart, then CO check, and BTN check.
+The turn comes Five Of Heart, then CO bet 8 chips, and BTN call.
+The river comes Three Of Club, then CO bet 11 chips, and BTN raise 40 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 73.0 chips, and your holding is [Ace of Spade and Jack of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: fold
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is CO, and your holding is [Jack of Spade and Ten of Spade].
+Before the flop, CO raise 2.3 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Ten Of Diamond, Six Of Heart, and Four Of Heart, then CO check, BTN bet 5 chips, CO raise 16 chips, and BTN call.
+The turn comes King Of Heart, then CO check, and BTN bet 48 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 86.0 chips, and your holding is [Jack of Spade and Ten of Spade].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: fold
+
+---
+
+Similar scenario:
+
+
+You are a specialist in playing 6-handed No Limit Texas Holdem. The following will be a game scenario and you need to make the optimal decision.
+
+Here is a game summary:
+
+The small blind is 0.5 chips and the big blind is 1 chips. Everyone started with 100 chips.
+The player positions involved in this game are UTG, HJ, CO, BTN, SB, BB.
+In this hand, your position is CO, and your holding is [Jack of Spade and Ten of Diamond].
+Before the flop, CO raise 2.3 chips, and BTN call. Assume that all other players that is not mentioned folded.
+The flop comes Ten Of Heart, Four Of Club, and Five Of Diamond, then CO check, BTN bet 5 chips, and CO call.
+The turn comes Seven Of Spade, then CO check, and BTN bet 12 chips.
+
+
+Now it is your turn to make a move.
+To remind you, the current pot size is 28.0 chips, and your holding is [Jack of Spade and Ten of Diamond].
+
+Decide on an action based on the strength of your hand on this board, your position, and actions before you. Do not explain your answer.
+Your optimal action is:
+Solver's optimal action: call
+===================
+
+Poker agent decision: action=check_or_call, raise_to=None, reasoning_chain=<observation>It is now the river with the board showing 5 of diamonds, Jack of diamonds, Jack of clubs, 6 of clubs, and 9 of clubs. Our hole cards are Eight of Spades and Ten of Spades. The pot size is 16 chips, and no bets have been made on this street. All four players remain active.</observation><reasoning>The hand's win probability has dropped further to about 23.36%, signifying a very weak equity relative to possible opponent holdings. There are no made straights, flushes, or high pairs that can be formed from our cards. With no betting action so far and a weak hand, betting is unlikely to gain value or bluff effectiveness. Checking is the optimal decision to avoid investing further chips in a likely losing situation and potentially induce a bluff or weak bet from an opponent.</reasoning><action>I will check and proceed to showdown to limit losses and gather information on opponents' holdings.</action>
 Action 15: p0 -> check
 -----Simulator View-----
 {'status': True,
  'street_index': 3,
  'actor_index': 1,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]', '[8d]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]', '[9c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [0, 0, 0, 0],
- 'stacks': [64, 64, 64, 64],
- 'payoffs': [-36, -36, -36, -36],
- 'pot_amounts': [144],
- 'total_pot_amount': 144,
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
  'checking_or_calling_amount': 0,
  'min_raise_to': 2,
- 'max_raise_to': 64,
+ 'max_raise_to': 96,
  'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 34,
+ 'operation_count': 32,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=0, '
                    'amount=0)'}
 Action 16: p1 -> check
@@ -650,26 +948,26 @@ Action 16: p1 -> check
 {'status': True,
  'street_index': 3,
  'actor_index': 2,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]', '[8d]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]', '[9c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [0, 0, 0, 0],
- 'stacks': [64, 64, 64, 64],
- 'payoffs': [-36, -36, -36, -36],
- 'pot_amounts': [144],
- 'total_pot_amount': 144,
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
  'checking_or_calling_amount': 0,
  'min_raise_to': 2,
- 'max_raise_to': 64,
+ 'max_raise_to': 96,
  'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 35,
+ 'operation_count': 33,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=1, '
                    'amount=0)'}
 Action 17: p2 -> check
@@ -677,26 +975,26 @@ Action 17: p2 -> check
 {'status': True,
  'street_index': 3,
  'actor_index': 3,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]', '[8d]'],
- 'hole_cards_by_player': {'p0': ['SIX OF HEARTS (6h)', 'QUEEN OF SPADES (Qs)'],
-                          'p1': ['NINE OF HEARTS (9h)', 'DEUCE OF SPADES (2s)'],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': ['KING OF CLUBS (Kc)',
-                                 'DEUCE OF DIAMONDS (2d)']},
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]', '[9c]'],
+ 'hole_cards_by_player': {'p0': ['EIGHT OF SPADES (8s)', 'TEN OF SPADES (Ts)'],
+                          'p1': ['FIVE OF CLUBS (5c)', 'SEVEN OF SPADES (7s)'],
+                          'p2': ['QUEEN OF HEARTS (Qh)',
+                                 'TREY OF DIAMONDS (3d)'],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
  'statuses': [True, True, True, True],
  'bets': [0, 0, 0, 0],
- 'stacks': [64, 64, 64, 64],
- 'payoffs': [-36, -36, -36, -36],
- 'pot_amounts': [144],
- 'total_pot_amount': 144,
+ 'stacks': [96, 96, 96, 96],
+ 'payoffs': [-4, -4, -4, -4],
+ 'pot_amounts': [16],
+ 'total_pot_amount': 16,
  'checking_or_calling_amount': 0,
  'min_raise_to': 2,
- 'max_raise_to': 64,
+ 'max_raise_to': 96,
  'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': True,
                              'can_complete_bet_or_raise_to': True},
- 'operation_count': 36,
+ 'operation_count': 34,
  'last_operation': 'CheckingOrCalling(commentary=None, player_index=2, '
                    'amount=0)'}
 Action 18: p3 -> check
@@ -704,16 +1002,16 @@ Action 18: p3 -> check
 {'status': False,
  'street_index': None,
  'actor_index': None,
- 'board_cards': ['[4h]', '[Qh]', '[Td]', '[9c]', '[8d]'],
+ 'board_cards': ['[5d]', '[Jd]', '[Jc]', '[6c]', '[9c]'],
  'hole_cards_by_player': {'p0': [],
                           'p1': [],
-                          'p2': ['NINE OF SPADES (9s)',
-                                 'FOUR OF DIAMONDS (4d)'],
-                          'p3': []},
- 'statuses': [False, False, True, False],
+                          'p2': [],
+                          'p3': ['FOUR OF SPADES (4s)',
+                                 'SIX OF DIAMONDS (6d)']},
+ 'statuses': [False, False, False, True],
  'bets': [0, 0, 0, 0],
- 'stacks': [64, 64, 208, 64],
- 'payoffs': [-36, -36, 108, -36],
+ 'stacks': [96, 96, 96, 112],
+ 'payoffs': [-4, -4, -4, 12],
  'pot_amounts': [0],
  'total_pot_amount': 0,
  'checking_or_calling_amount': None,
@@ -722,7 +1020,7 @@ Action 18: p3 -> check
  'legal_actions_for_actor': {'can_fold': False,
                              'can_check_or_call': False,
                              'can_complete_bet_or_raise_to': False},
- 'operation_count': 44,
- 'last_operation': 'ChipsPulling(commentary=None, player_index=2, amount=144)'}
-Final stacks: [64, 64, 208, 64]
-Payoffs: [-36, -36, 108, -36]
+ 'operation_count': 43,
+ 'last_operation': 'ChipsPulling(commentary=None, player_index=3, amount=16)'}
+Final stacks: [96, 96, 96, 112]
+Payoffs: [-4, -4, -4, 12]
