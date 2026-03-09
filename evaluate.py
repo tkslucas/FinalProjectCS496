@@ -1,4 +1,7 @@
 import asyncio
+import contextlib
+import io
+import os
 
 from environment import _street_name, build_state, build_heuristic_table, build_llm_agent_allowed_view, print_hand_summary
 from action_entry import ActionEntry
@@ -24,6 +27,9 @@ async def main():
     print(f"========== Starting Evaluation for {NUM_HANDS} hands ==========")
     print(f"Poker agent seat: {POKER_AGENT_SEAT}")
     print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
+
+    os.makedirs("results", exist_ok=True)
+    summary_file = open("results/hand_summaries.txt", "w")
 
     for hand_num in range(1, NUM_HANDS + 1):
         print(f"========== STARTING HAND {hand_num} ==========")
@@ -68,7 +74,17 @@ async def main():
         tracker.record_hand(hand_num, state.payoffs)
         logger.log_final_result(state)
         print(f"========== ENDING HAND {hand_num} ==========")
-        print_hand_summary(state.payoffs, tracker)
+
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            print_hand_summary(state.payoffs, tracker)
+        summary_text = buffer.getvalue()
+        print(summary_text, end="")
+        summary_file.write(f"========== HAND {hand_num} SUMMARY ==========\n")
+        summary_file.write(summary_text)
+        summary_file.write("\n")
+
+    summary_file.close()
 
     tracker.report()
     tracker.plot_results()

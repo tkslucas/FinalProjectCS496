@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 
 class PerformanceTracker:
@@ -41,4 +43,6 @@ class PerformanceTracker:
         plt.title(f"Agent Performance Over {len(self.hand_numbers)-1} Hands")
         plt.legend()
         plt.grid(True, alpha=0.3)
-        plt.savefig("results.png")
+
+        os.makedirs("results", exist_ok=True)
+        plt.savefig("results/results_plot.png")
