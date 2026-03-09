@@ -7,3 +7,4 @@ chroma_db/
 *.sqlite3
 chroma_db/
 *.sqlite3
+**/myenv/
