@@ -4,7 +4,7 @@ from typing import cast
 from pokerkit import Automation, NoLimitTexasHoldem, State
 
 from action_entry import ActionEntry
-from heuristic_agent import HeuristicAgent
+from heuristic_agent import HandStrengthPolicy, HeuristicAgent
 from performance_tracker import PerformanceTracker
 from constants import POKER_AGENT_SEAT, USES_UNIFORM_ANTES, ANTE, STARTING_STACK, MIN_BET, SMALL_BLIND, BIG_BLIND, PLAYER_COUNT
 
@@ -54,7 +54,12 @@ def build_state():
 def build_heuristic_table(player_count: int):
     """Create Heuristic agents for evaluation"""
     return {
-        i: HeuristicAgent(seat_index=i, name=f"heuristic_p{i}")
+        i: HeuristicAgent(
+            seat_index=i,
+            name=f"heuristic_p{i}",
+            # omitting defaults to random policy
+            policy=HandStrengthPolicy(),
+        )
         for i in range(player_count)
         if i != POKER_AGENT_SEAT
     }
