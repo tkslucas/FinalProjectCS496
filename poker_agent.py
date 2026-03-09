@@ -16,6 +16,7 @@ load_dotenv()
 
 class PokerAgent:
     def __init__(self):
+        self.name = "Poker Agent"
         self.model = MODEL
         self.mcp_path = os.path.abspath(MCP_PATH)
         self.previous_response_id: str | None = None    

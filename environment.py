@@ -6,7 +6,7 @@ from pokerkit import Automation, NoLimitTexasHoldem, State
 from action_entry import ActionEntry
 from heuristic_agent import HeuristicAgent
 from performance_tracker import PerformanceTracker
-from constants import POKER_AGENT_SEAT, USES_UNIFORM_ANTES, ANTE, STARTING_STACK, NUM_HANDS, MIN_BET, SMALL_BLIND, BIG_BLIND, PLAYER_COUNT
+from constants import POKER_AGENT_SEAT, USES_UNIFORM_ANTES, ANTE, STARTING_STACK, MIN_BET, SMALL_BLIND, BIG_BLIND, PLAYER_COUNT
 
 ########### HELPERS ###########
 def _card_strings(cards) -> list[str]:
@@ -154,10 +154,10 @@ def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> N
         )
 
 def print_hand_summary(payoffs: list[float], tracker: PerformanceTracker):
-    big_blind = tracker.big_blind
-
-    hand_bb = tuple(f"{p / big_blind:+.2f} BB" for p in payoffs)
-    cum_bb = tuple(f"{tracker.history[f'p{i}'][-1]:+.2f} BB" for i in range(PLAYER_COUNT))
+    bb = tracker.big_blind
+    
+    hand_bb = tuple(f"{tracker.names[i]}: {p/bb:+.2f} BB" for i, p in enumerate(payoffs))
+    cum_bb = tuple(f"{tracker.names[i]}: {tracker.history[i][-1]:+.2f} BB" for i in range(PLAYER_COUNT))
 
     print(f"Hand Payoffs (BB): {hand_bb}")
     print(f"Cumulative Total (BB): {cum_bb}")

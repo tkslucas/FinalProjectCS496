@@ -9,12 +9,17 @@ from logger import HandLogger
 from constants import LOG_DIR, POKER_AGENT_SEAT, NUM_HANDS, BIG_BLIND, PLAYER_COUNT
 
 async def main():
-    tracker = PerformanceTracker(PLAYER_COUNT, BIG_BLIND)
-    logger = HandLogger(LOG_DIR)
 
     poker_agent = PokerAgent()
     await poker_agent.initialize()
     heuristic_agents = build_heuristic_table(PLAYER_COUNT)
+
+    player_names = {POKER_AGENT_SEAT: poker_agent.name}
+    for i, agent in heuristic_agents.items():
+        player_names[i] = agent.name
+
+    tracker = PerformanceTracker(player_names, BIG_BLIND)
+    logger = HandLogger(LOG_DIR)
 
     print(f"========== Starting Evaluation for {NUM_HANDS} hands ==========")
     print(f"Poker agent seat: {POKER_AGENT_SEAT}")
