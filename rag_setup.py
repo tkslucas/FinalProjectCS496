@@ -6,9 +6,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 dataset = load_dataset("RZ412/PokerBench", split="train[:10000]")
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    api_key = input("Please enter your OpenAI API key: ")
+    os.environ["OPENAI_API_KEY"] = api_key
 
 client = chromadb.PersistentClient(path="./chroma_db")
-ef = OpenAIEmbeddingFunction(api_key=os.environ["OPENAI_API_KEY"], model_name="text-embedding-3-small")
+ef = OpenAIEmbeddingFunction(api_key=api_key, model_name="text-embedding-3-small")
 collection = client.get_or_create_collection("poker_hands", embedding_function=ef)
 
 if collection.count() == 10000:

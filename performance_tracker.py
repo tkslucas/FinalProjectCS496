@@ -41,4 +41,4 @@ class PerformanceTracker:
         plt.title(f"Agent Performance Over {len(self.hand_numbers)-1} Hands")
         plt.legend()
         plt.grid(True, alpha=0.3)
-        plt.show()
+        plt.savefig("results.png")

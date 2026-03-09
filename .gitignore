@@ -8,3 +8,4 @@ chroma_db/
 chroma_db/
 *.sqlite3
 **/myenv/
+results.png

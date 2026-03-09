@@ -29,17 +29,19 @@ class PokerAgent:
             name="equity_calculator",
             params={
                 "command": "python",
-                "args": [self.mcp_path]
-            }
+                "args": [self.mcp_path],
+            },
+            client_session_timeout_seconds = 30
         )
 
         self.rag_server = MCPServerStdio(
-        name="rag_retrieval",
-        params={
-            "command": "python",
-            "args": [os.path.abspath("mcp_servers/rag_retrieval_server/server.py")],
-            "cwd": os.path.abspath(".")
-        }
+            name="rag_retrieval",
+            params={
+                "command": "python",
+                "args": [os.path.abspath("mcp_servers/rag_retrieval_server/server.py")],
+                "cwd": os.path.abspath(".")
+            },
+            client_session_timeout_seconds = 30
         )
 
         await self.mcp_server.connect()
