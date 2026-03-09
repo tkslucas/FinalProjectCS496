@@ -3,3 +3,8 @@ __pycache__
 .env
 .venv
 logs
+chroma_db/
+*.sqlite3
+chroma_db/
+*.sqlite3
+**/myenv/
