@@ -17,6 +17,7 @@ from action_entry import ActionEntry
 
 class RandomPolicy:
     """Pick randomly from the legal actions."""
+    name = "random"
 
     def decide(self, state, seat_index):
         actions = []
@@ -57,6 +58,7 @@ class RandomPolicy:
 
 class HandStrengthPolicy:
     """Choose actions from monte carlo hand strength estimates."""
+    name = "hand_strength"
 
     def __init__(
         self,

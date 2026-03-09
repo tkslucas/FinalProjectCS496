@@ -4,22 +4,35 @@ from typing import cast
 from pokerkit import Automation, NoLimitTexasHoldem, State
 
 from action_entry import ActionEntry
+from constants import (
+    ANTE,
+    BIG_BLIND,
+    MIN_BET,
+    PLAYER_COUNT,
+    POKER_AGENT_SEAT,
+    SMALL_BLIND,
+    STARTING_STACK,
+    USES_UNIFORM_ANTES,
+)
 from heuristic_agent import HandStrengthPolicy, HeuristicAgent
 from performance_tracker import PerformanceTracker
-from constants import POKER_AGENT_SEAT, USES_UNIFORM_ANTES, ANTE, STARTING_STACK, MIN_BET, SMALL_BLIND, BIG_BLIND, PLAYER_COUNT
+
 
 ########### HELPERS ###########
 def _card_strings(cards) -> list[str]:
     return [str(card) for card in cards]
 
+
 def _seat_label(seat_index: int | None) -> str | None:
     return None if seat_index is None else f"p{seat_index}"
+
 
 def _street_name(street_index: int | None) -> str:
     if street_index is None:
         return "hand_over"
     names = {0: "preflop", 1: "flop", 2: "turn", 3: "river"}
     return names.get(street_index, f"street_{street_index}")
+
 
 ########### ENVIRONMENT SETUP & INTERACTION ###########
 def build_state():
@@ -42,8 +55,8 @@ def build_state():
 
     return NoLimitTexasHoldem.create_state(
         automations,
-        USES_UNIFORM_ANTES, 
-        ANTE, 
+        USES_UNIFORM_ANTES,
+        ANTE,
         (SMALL_BLIND, BIG_BLIND),
         MIN_BET,
         (STARTING_STACK, STARTING_STACK, STARTING_STACK, STARTING_STACK),
@@ -54,15 +67,13 @@ def build_state():
 def build_heuristic_table(player_count: int):
     """Create Heuristic agents for evaluation"""
     return {
-        i: HeuristicAgent(
-            seat_index=i,
-            name=f"heuristic_p{i}",
-            # omitting defaults to random policy
-            policy=HandStrengthPolicy(),
-        )
+        i: HeuristicAgent(seat_index=i, name=f"{policy.name}_p{i}", policy=policy)
         for i in range(player_count)
         if i != POKER_AGENT_SEAT
+        # or RandomPolicy
+        for policy in [HandStrengthPolicy()]
     }
+
 
 def build_simulator_view(state: State) -> dict:
     """Everything the simulator knows right now."""
@@ -145,6 +156,7 @@ def build_llm_agent_allowed_view(
         "poker_agent_hole_cards": _card_strings(state.hole_cards[POKER_AGENT_SEAT]),
     }
 
+
 ########### PRINTING ###########
 def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
     print("-----Simulator View-----")
@@ -158,11 +170,17 @@ def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> N
             )
         )
 
+
 def print_hand_summary(payoffs: list[float], tracker: PerformanceTracker):
     bb = tracker.big_blind
-    
-    hand_bb = tuple(f"{tracker.names[i]}: {p/bb:+.2f} BB" for i, p in enumerate(payoffs))
-    cum_bb = tuple(f"{tracker.names[i]}: {tracker.history[i][-1]:+.2f} BB" for i in range(PLAYER_COUNT))
+
+    hand_bb = tuple(
+        f"{tracker.names[i]}: {p / bb:+.2f} BB" for i, p in enumerate(payoffs)
+    )
+    cum_bb = tuple(
+        f"{tracker.names[i]}: {tracker.history[i][-1]:+.2f} BB"
+        for i in range(PLAYER_COUNT)
+    )
 
     print(f"Hand Payoffs (BB): {hand_bb}")
     print(f"Cumulative Total (BB): {cum_bb}")
