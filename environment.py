@@ -1,16 +1,27 @@
-import os
-import json
-import asyncio
 from pprint import pformat
 from typing import cast
 
 from pokerkit import Automation, NoLimitTexasHoldem, State
 
 from action_entry import ActionEntry
-from heuristic_agent import HeuristicAgent, apply_heuristic_agent_decision
-from poker_agent import PokerAgent, apply_poker_agent_decision
-from constants import POKER_AGENT_SEAT
+from heuristic_agent import HeuristicAgent
+from performance_tracker import PerformanceTracker
+from constants import POKER_AGENT_SEAT, USES_UNIFORM_ANTES, ANTE, STARTING_STACK, NUM_HANDS, MIN_BET, SMALL_BLIND, BIG_BLIND, PLAYER_COUNT
 
+########### HELPERS ###########
+def _card_strings(cards) -> list[str]:
+    return [str(card) for card in cards]
+
+def _seat_label(seat_index: int | None) -> str | None:
+    return None if seat_index is None else f"p{seat_index}"
+
+def _street_name(street_index: int | None) -> str:
+    if street_index is None:
+        return "hand_over"
+    names = {0: "preflop", 1: "flop", 2: "turn", 3: "river"}
+    return names.get(street_index, f"street_{street_index}")
+
+########### ENVIRONMENT SETUP & INTERACTION ###########
 def build_state():
     """Game configurations"""
     automations = cast(
@@ -31,113 +42,22 @@ def build_state():
 
     return NoLimitTexasHoldem.create_state(
         automations,
-        False,
-        0,
-        (1, 2),  # small blind, big blind
-        2,  # min bet
-        (100, 100, 100, 100),  # starting stacks
-        4,  # player count
+        USES_UNIFORM_ANTES, 
+        ANTE, 
+        (SMALL_BLIND, BIG_BLIND),
+        MIN_BET,
+        (STARTING_STACK, STARTING_STACK, STARTING_STACK, STARTING_STACK),
+        PLAYER_COUNT,
     )
 
 
 def build_heuristic_table(player_count: int):
-    """Create heuristic agents"""
+    """Create Heuristic agents for evaluation"""
     return {
         i: HeuristicAgent(seat_index=i, name=f"heuristic_p{i}")
         for i in range(player_count)
         if i != POKER_AGENT_SEAT
     }
-
-
-async def main():
-    state = build_state()
-    hand_action_history: list[ActionEntry] = []
-    heuristic_agents = build_heuristic_table(state.player_count)
-
-    for agent in heuristic_agents.values():
-        agent.reset_for_new_hand()
-
-    poker_agent = PokerAgent()
-    await poker_agent.initialize()
-    poker_agent.reset_for_new_hand()
-
-    print("Poker agent seat: 0")
-    print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
-    print(f"Starting stacks: {state.stacks}")
-    print_state_views(state, hand_action_history)
-
-    action_no = 1
-    while state.status:
-        actor = state.actor_index
-        if actor is None:
-            break
-
-        if actor == POKER_AGENT_SEAT:
-            current_street = _street_name(state.street_index)
-            llm_view = build_llm_agent_allowed_view(state, hand_action_history)
-            decision = await poker_agent.decide(llm_view)
-            action_entry = apply_poker_agent_decision(
-                state,
-                decision,
-                street=current_street,
-            )
-            hand_action_history.append(action_entry)
-            action = str(action_entry["action_taken"])
-            print(
-                "Poker agent decision: "
-                f"action={decision.action}, "
-                f"raise_to={decision.raise_to}, "
-                f"reasoning_chain={decision.reasoning_chain}"
-            )
-        else:
-            # heuristic agent's turn
-            current_street = _street_name(state.street_index)
-            heuristic_decision = heuristic_agents[actor].decide(state)
-            action_entry = apply_heuristic_agent_decision(
-                state,
-                heuristic_decision,
-                street=current_street,
-            )
-            hand_action_history.append(action_entry)
-            action = str(action_entry["action_taken"])
-
-        print(f"Action {action_no}: p{actor} -> {action}")
-        print_state_views(state, hand_action_history)
-        action_no += 1
-
-    print(f"Final stacks: {state.stacks}")
-    print(f"Payoffs: {state.payoffs}")
-
-    poker_agent._log_final_result(state)
-    await poker_agent.cleanup()
-
-
-def _card_strings(cards) -> list[str]:
-    return [str(card) for card in cards]
-
-
-def _seat_label(seat_index: int | None) -> str | None:
-    return None if seat_index is None else f"p{seat_index}"
-
-
-def _street_name(street_index: int | None) -> str:
-    if street_index is None:
-        return "hand_over"
-    names = {0: "preflop", 1: "flop", 2: "turn", 3: "river"}
-    return names.get(street_index, f"street_{street_index}")
-
-def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
-    print("-----Simulator View-----")
-    print(pformat(build_simulator_view(state), sort_dicts=False))
-    if state.actor_index == POKER_AGENT_SEAT:
-        print("\n------LLM Agent View-----\n")
-        print(
-            pformat(
-                build_llm_agent_allowed_view(state, hand_action_history),
-                sort_dicts=False,
-            )
-        )
-
 
 def build_simulator_view(state: State) -> dict:
     """Everything the simulator knows right now."""
@@ -220,6 +140,24 @@ def build_llm_agent_allowed_view(
         "poker_agent_hole_cards": _card_strings(state.hole_cards[POKER_AGENT_SEAT]),
     }
 
+########### PRINTING ###########
+def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
+    print("-----Simulator View-----")
+    print(pformat(build_simulator_view(state), sort_dicts=False))
+    if state.actor_index == POKER_AGENT_SEAT:
+        print("\n------LLM Agent View-----\n")
+        print(
+            pformat(
+                build_llm_agent_allowed_view(state, hand_action_history),
+                sort_dicts=False,
+            )
+        )
 
-if __name__ == "__main__":
-    asyncio.run(main())
+def print_hand_summary(payoffs: list[float], tracker: PerformanceTracker):
+    big_blind = tracker.big_blind
+
+    hand_bb = tuple(f"{p / big_blind:+.2f} BB" for p in payoffs)
+    cum_bb = tuple(f"{tracker.history[f'p{i}'][-1]:+.2f} BB" for i in range(PLAYER_COUNT))
+
+    print(f"Hand Payoffs (BB): {hand_bb}")
+    print(f"Cumulative Total (BB): {cum_bb}")

@@ -1,4 +1,18 @@
+########### ENV CONFIG ###########
 POKER_AGENT_SEAT = 0
+USES_UNIFORM_ANTES = False
+ANTE = 0
+STARTING_STACK = 100
+NUM_HANDS = 5
+MIN_BET = 2
+SMALL_BLIND = 1
+BIG_BLIND = 2
+PLAYER_COUNT = 4
+
+########### SIMULATION CONFIG ###########
+NUM_HANDS = 2
+
+########### AGENT CONFIG ###########
 MCP_PATH="./mcp_servers/poker_win_calculator/poker.py"
 MODEL="gpt-4.1-mini"
 LOG_DIR="./logs"
