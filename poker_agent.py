@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import asyncio
 from typing import Any
 
 from agents import Agent, Runner
@@ -11,7 +12,6 @@ from dotenv import load_dotenv
 from action_entry import ActionEntry
 from action_decision import PokerAgentDecision
 from constants import MCP_PATH, MODEL, SYSTEM_PROMPT, LOG_DIR
-from rag_retrieval import retrieve_similar_hands
 
 
 load_dotenv()
@@ -22,6 +22,7 @@ class PokerAgent:
         self.mcp_path = os.path.abspath(MCP_PATH)
         self.previous_response_id: str | None = None    
         self.mcp_server: MCPServerStdio | None = None
+        self.rag_server: MCPServerStdio | None = None
         self._agent: Agent | None = None
         self.log_dir = LOG_DIR
         self.current_hand_id: int | None = None
@@ -35,14 +36,24 @@ class PokerAgent:
             }
         )
 
+        self.rag_server = MCPServerStdio(
+        name="rag_retrieval",
+        params={
+            "command": "python",
+            "args": [os.path.abspath("mcp_servers/rag_retrieval_server/server.py")],
+            "cwd": os.path.abspath(".")
+        }
+        )
+
         await self.mcp_server.connect()
+        await self.rag_server.connect()
         
         self._agent = Agent(
             name="Poker Agent",
             model=self.model,
             instructions=SYSTEM_PROMPT,
             output_type=PokerAgentDecision,
-            mcp_servers=[self.mcp_server]
+            mcp_servers=[self.mcp_server, self.rag_server]
         )
 
         if not os.path.exists(self.log_dir):
@@ -55,20 +66,8 @@ class PokerAgent:
         self.current_hand_id = int(time.time() * 1000)
 
     async def decide(self, llm_view: dict[str, Any]) -> PokerAgentDecision:
-
-        hand_history = llm_view.get("hand_action_history", [])
-        similar_hands = retrieve_similar_hands(hand_history, llm_view)
-
-        print("\n=== RAG RESULTS ===")
-        print(similar_hands)
-        print("===================\n")
         
-        input_prompt = (
-            f"Game State: {json.dumps(llm_view)}\n\n"
-            f"Here are similar hands from a poker solver database for reference:\n"
-            f"{similar_hands}\n\n"
-            f"Use these as guidance but make your own decision based on the full game state."
-        )
+        input_prompt = f"Game State: {json.dumps(llm_view)}\n\n"
 
         result = await Runner.run(
             self._agent,
@@ -121,8 +120,16 @@ class PokerAgent:
             json.dump(result_data, f, indent=4)
 
     async def cleanup(self):
-        await self.mcp_server.cleanup()
-        self.mcp_server = None
+        try:
+            async with asyncio.timeout(5):
+                await asyncio.shield(self.mcp_server.cleanup())
+        except (asyncio.CancelledError, Exception):
+            pass
+        try:
+            async with asyncio.timeout(5):
+                await asyncio.shield(self.rag_server.cleanup())
+        except (asyncio.CancelledError, Exception):
+            pass
 
 def apply_poker_agent_decision(
     state: State,
