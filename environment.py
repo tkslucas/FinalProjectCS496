@@ -13,7 +13,7 @@ from constants import (
     STARTING_STACK,
     USES_UNIFORM_ANTES,
 )
-from heuristic_agent import HandStrengthPolicy, HeuristicAgent
+from heuristic_agent import HandStrengthPolicy, HeuristicAgent, RandomPolicy
 from performance_tracker import PerformanceTracker
 
 

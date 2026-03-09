@@ -9,7 +9,7 @@ BIG_BLIND = 2
 PLAYER_COUNT = 4
 
 ########### SIMULATION CONFIG ###########
-NUM_HANDS = 2
+NUM_HANDS = 12
 
 ########### AGENT CONFIG ###########
 MCP_PATH="./mcp_servers/poker_win_calculator/poker.py"

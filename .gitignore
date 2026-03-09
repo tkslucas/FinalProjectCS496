@@ -2,7 +2,7 @@ __pycache__
 .DS_Store
 .env
 .venv
-logs
+logs**/
 chroma_db/
 *.sqlite3
 chroma_db/
