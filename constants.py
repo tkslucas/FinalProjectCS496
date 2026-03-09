@@ -34,7 +34,7 @@ Follow this strict execution flow for every turn:
    - Note the current street and the size of the pot relative to the amount you must call.
    - Assess board texture (e.g., "Connected board with flush draw possibilities").
 
-2. **Tool Call (Mandatory)**:
+2a. **Tool Call (Mandatory)**:
    - Call `analyse_poker_cards` before determining your move.
    - Format cards as shorthand strings (e.g., 'As', 'Kh', '10c').
    - Inputs: `my_cards_input` (your cards), `community_input` (board), `opponent_input` ('').
