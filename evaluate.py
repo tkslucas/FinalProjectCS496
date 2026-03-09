@@ -3,36 +3,54 @@ import contextlib
 import io
 import os
 
-from environment import _street_name, build_state, build_heuristic_table, build_llm_agent_allowed_view, print_hand_summary
+from environment import (
+    _street_name,
+    build_heuristic_table,
+    build_llm_agent_allowed_view,
+    build_state,
+    print_hand_summary,
+)
 from action_entry import ActionEntry
 from heuristic_agent import apply_heuristic_agent_decision
 from poker_agent import PokerAgent, apply_poker_agent_decision
 from performance_tracker import PerformanceTracker
 from logger import HandLogger
-from constants import LOG_DIR, POKER_AGENT_SEAT, NUM_HANDS, BIG_BLIND, PLAYER_COUNT
+from constants import BIG_BLIND, LOG_DIR, NUM_HANDS, PLAYER_COUNT
 
 async def main():
 
     poker_agent = PokerAgent()
     await poker_agent.initialize()
-    heuristic_agents = build_heuristic_table(PLAYER_COUNT)
 
-    player_names = {POKER_AGENT_SEAT: poker_agent.name}
-    for i, agent in heuristic_agents.items():
-        player_names[i] = agent.name
+    player_names = {
+        0: poker_agent.name,
+        1: "heuristic_1",
+        2: "heuristic_2",
+        3: "heuristic_3",
+    }
 
     tracker = PerformanceTracker(player_names, BIG_BLIND)
     logger = HandLogger(LOG_DIR)
 
     print(f"========== Starting Evaluation for {NUM_HANDS} hands ==========")
-    print(f"Poker agent seat: {POKER_AGENT_SEAT}")
-    print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
 
     os.makedirs("results", exist_ok=True)
     summary_file = open("results/hand_summaries.txt", "w")
 
     for hand_num in range(1, NUM_HANDS + 1):
+        poker_agent_seat = (hand_num - 1) % PLAYER_COUNT
+        heuristic_agents = build_heuristic_table(PLAYER_COUNT, poker_agent_seat)
+        seat_to_identity = {poker_agent_seat: 0}
+        heuristic_identity = 1
+        for seat in range(PLAYER_COUNT):
+            if seat == poker_agent_seat:
+                continue
+            seat_to_identity[seat] = heuristic_identity
+            heuristic_identity += 1
+
         print(f"========== STARTING HAND {hand_num} ==========")
+        print(f"Poker agent seat: {poker_agent_seat}")
+        print(f"Heuristic seats: {sorted(heuristic_agents.keys())}")
 
         logger.start_new_hand()
         state = build_state()
@@ -50,8 +68,12 @@ async def main():
 
             current_street = _street_name(state.street_index)
 
-            if actor == POKER_AGENT_SEAT:
-                llm_view = build_llm_agent_allowed_view(state, hand_action_history)
+            if actor == poker_agent_seat:
+                llm_view = build_llm_agent_allowed_view(
+                    state,
+                    poker_agent_seat,
+                    hand_action_history,
+                )
                 decision = await poker_agent.decide(llm_view)
                 action_entry = apply_poker_agent_decision(
                     state,
@@ -71,13 +93,17 @@ async def main():
 
             action_num += 1
 
-        tracker.record_hand(hand_num, state.payoffs)
-        logger.log_final_result(state)
+        identity_payoffs = [0.0] * PLAYER_COUNT
+        for seat, payoff in enumerate(state.payoffs):
+            identity_payoffs[seat_to_identity[seat]] = payoff
+
+        tracker.record_hand(hand_num, identity_payoffs)
+        logger.log_final_result(state, seat_to_identity)
         print(f"========== ENDING HAND {hand_num} ==========")
 
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            print_hand_summary(state.payoffs, tracker)
+            print_hand_summary(identity_payoffs, tracker)
         summary_text = buffer.getvalue()
         print(summary_text, end="")
         summary_file.write(f"========== HAND {hand_num} SUMMARY ==========\n")

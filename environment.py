@@ -9,7 +9,6 @@ from constants import (
     BIG_BLIND,
     MIN_BET,
     PLAYER_COUNT,
-    POKER_AGENT_SEAT,
     SMALL_BLIND,
     STARTING_STACK,
     USES_UNIFORM_ANTES,
@@ -64,13 +63,12 @@ def build_state():
     )
 
 
-def build_heuristic_table(player_count: int):
+def build_heuristic_table(player_count: int, poker_agent_seat: int):
     """Create Heuristic agents for evaluation"""
     return {
         i: HeuristicAgent(seat_index=i, name=f"{policy.name}_p{i}", policy=policy)
         for i in range(player_count)
-        if i != POKER_AGENT_SEAT
-        # or RandomPolicy
+        if i != poker_agent_seat
         for policy in [HandStrengthPolicy()]
     }
 
@@ -121,11 +119,12 @@ def build_simulator_view(state: State) -> dict:
 
 def build_llm_agent_allowed_view(
     state: State,
+    poker_agent_seat: int,
     hand_action_history: list[ActionEntry] | None = None,
 ) -> dict:
     """What the agent is allowed to see"""
     actor = state.actor_index
-    is_poker_agent_turn = actor == POKER_AGENT_SEAT
+    is_poker_agent_turn = actor == poker_agent_seat
     poker_agent_options = None
     if is_poker_agent_turn:
         poker_agent_options = {
@@ -143,7 +142,7 @@ def build_llm_agent_allowed_view(
         "board_cards": _card_strings(state.board_cards),
         "whose_turn": _seat_label(actor),
         "is_poker_agent_turn": is_poker_agent_turn,
-        "poker_agent_position": _seat_label(POKER_AGENT_SEAT),
+        "poker_agent_position": _seat_label(poker_agent_seat),
         "active_players": [
             _seat_label(i) for i, is_active in enumerate(state.statuses) if is_active
         ],
@@ -153,19 +152,27 @@ def build_llm_agent_allowed_view(
         "pot_breakdown": list(state.pot_amounts),
         "hand_action_history": hand_action_history or [],
         "poker_agent_options_when_in_turn": poker_agent_options,
-        "poker_agent_hole_cards": _card_strings(state.hole_cards[POKER_AGENT_SEAT]),
+        "poker_agent_hole_cards": _card_strings(state.hole_cards[poker_agent_seat]),
     }
 
 
 ########### PRINTING ###########
-def print_state_views(state: State, hand_action_history: list[ActionEntry]) -> None:
+def print_state_views(
+    state: State,
+    poker_agent_seat: int,
+    hand_action_history: list[ActionEntry],
+) -> None:
     print("-----Simulator View-----")
     print(pformat(build_simulator_view(state), sort_dicts=False))
-    if state.actor_index == POKER_AGENT_SEAT:
+    if state.actor_index == poker_agent_seat:
         print("\n------LLM Agent View-----\n")
         print(
             pformat(
-                build_llm_agent_allowed_view(state, hand_action_history),
+                build_llm_agent_allowed_view(
+                    state,
+                    poker_agent_seat,
+                    hand_action_history,
+                ),
                 sort_dicts=False,
             )
         )

@@ -45,7 +45,7 @@ class HandLogger:
         with open(filepath, "w") as f:
             json.dump(log_entry, f, indent=4)
 
-    def log_final_result(self, state: State):
+    def log_final_result(self, state: State, seat_to_identity: dict[int, int] | None = None):
         """Logs the final payoffs and stacks for the hand."""
         if self.current_hand_id is None:
             return
@@ -55,6 +55,10 @@ class HandLogger:
             "final_stacks": list(state.stacks),
             "payoffs": list(state.payoffs),
         }
+        if seat_to_identity is not None:
+            result_data["seat_to_identity"] = {
+                f"p{seat}": identity for seat, identity in seat_to_identity.items()
+            }
 
         with open(filepath, "w") as f:
             json.dump(result_data, f, indent=4)
