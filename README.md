@@ -1,11 +1,4 @@
 # FinalProjectCS496
-
-The Pokerkit state object internally updates the turn, order, phase. state.actor_index is who the current player is.
-For example if we call `state.check_or_call()`, then the current player made that move and the state.actor_index
-is updated to who should act next.
-
-Player 0 will be the LLM Poker agent. Players 1, 2, 3 are heuristic-based agents (right now it's super basic)
-
 ## Environment & API key setup
 
 ```bash
@@ -19,4 +12,14 @@ Create a .env file in the root directory and fill in API key
 OPEN_API_KEY=[API_KEY]
 ```
 
+## Running the Project
+Setup the rag database:
+```bash
+python rag_setup.py
+```
+
+Run the evaluation pipeline:
+```bash
+python evaluate.py
+```
 
